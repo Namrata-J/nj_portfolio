@@ -20,8 +20,12 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import EmailIcon from '@mui/icons-material/Email';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import dynamic from 'next/dynamic';
+import emailjs from '@emailjs/browser';
 import PageTransition from '../../components/PageTransition';
 import { personalInfo } from '../../data/content';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
 
 const socialLinks = [
     { icon: <GitHubIcon />, label: 'GitHub', href: personalInfo.social.github, color: '#F8F9FA' },
@@ -45,27 +49,39 @@ const inputSx = {
 export default function ContactPage() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [copied, setCopied] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('loading');
 
         try {
-            const response = await fetch(`https://formspree.io/namratajain29001@gmail.com`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
+            // Note: These are placeholder IDs. 
+            // The user will need to replace them or I will provide instructions.
+            await emailjs.send(
+                'service_portfolio',
+                'template_contact',
+                {
+                    from_name: formData.name,
+                    from_email: formData.email,
+                    message: formData.message,
+                    to_email: 'namratajain29001@gmail.com',
+                },
+                'YOUR_PUBLIC_KEY'
+            );
 
-            if (response.ok) {
-                setStatus('success');
-                setFormData({ name: '', email: '', message: '' });
-            } else {
-                setStatus('error');
-            }
+            setStatus('success');
+            setFormData({ name: '', email: '', message: '' });
         } catch (error) {
+            console.error('EmailJS Error:', error);
             setStatus('error');
         }
+    };
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(personalInfo.email);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     return (
@@ -228,19 +244,31 @@ export default function ContactPage() {
                                     <Typography variant="h6" sx={{ mb: 1.5 }}>
                                         Prefer email?
                                     </Typography>
-                                    <a
-                                        href={`mailto:${personalInfo.email}`}
-                                        style={{
-                                            color: '#FFE66D',
-                                            textDecoration: 'none',
-                                            fontWeight: 600,
-                                            fontSize: '1.1rem',
-                                        }}
-                                        onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
-                                        onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
-                                    >
-                                        {personalInfo.email}
-                                    </a>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                                        <Typography
+                                            variant="body1"
+                                            sx={{
+                                                color: '#FFE66D',
+                                                fontWeight: 600,
+                                                fontSize: '1.1rem',
+                                            }}
+                                        >
+                                            {personalInfo.email}
+                                        </Typography>
+                                        <IconButton
+                                            size="small"
+                                            onClick={copyToClipboard}
+                                            sx={{ color: '#FFE66D' }}
+                                            title="Copy to clipboard"
+                                        >
+                                            {copied ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
+                                        </IconButton>
+                                    </Box>
+                                    {copied && (
+                                        <Typography variant="caption" sx={{ color: '#4ECDC4', mt: 1, display: 'block' }}>
+                                            Copied to clipboard!
+                                        </Typography>
+                                    )}
                                 </CardContent>
                             </Card>
                         </motion.div>
