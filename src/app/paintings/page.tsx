@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Container,
     Typography,
@@ -16,7 +16,6 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import BrushIcon from '@mui/icons-material/Brush';
 import PageTransition from '../../components/PageTransition';
 import { paintings, personalInfo } from '../../data/content';
-import { getAssetPath } from '../../utils/paths';
 
 export default function PaintingsPage() {
     const [selectedPainting, setSelectedPainting] = useState<number | null>(null);
