@@ -33,6 +33,7 @@ const GitHubCalendar = dynamic(
 );
 import { personalInfo, experience, education, skills } from '@/data/content';
 import PageTransition from '@/components/PageTransition';
+import { getAssetPath } from '@/utils/paths';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -280,7 +281,7 @@ export default function HomePage() {
                     }}
                   />
                   <Avatar
-                    src="/profile.jpg"
+                    src={getAssetPath('/profile.jpg')}
                     alt="Namrata Jain"
                     sx={{
                       width: '100%',

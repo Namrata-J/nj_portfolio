@@ -16,6 +16,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import BrushIcon from '@mui/icons-material/Brush';
 import PageTransition from '@/components/PageTransition';
 import { paintings, personalInfo } from '@/data/content';
+import { getAssetPath } from '@/utils/paths';
 
 export default function PaintingsPage() {
     const [selectedPainting, setSelectedPainting] = useState<number | null>(null);
@@ -89,7 +90,7 @@ export default function PaintingsPage() {
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
-                                            src={painting.image}
+                                            src={getAssetPath(painting.image)}
                                             alt={painting.title}
                                             style={{
                                                 width: '100%',
@@ -160,7 +161,7 @@ export default function PaintingsPage() {
                                     <Box sx={{ flex: 1, background: '#0a0812', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
-                                            src={paintings[selectedPainting].image}
+                                            src={getAssetPath(paintings[selectedPainting].image)}
                                             alt={paintings[selectedPainting].title}
                                             style={{
                                                 width: '100%',

@@ -15,6 +15,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: repo,
+  },
 };
 
 export default nextConfig;
