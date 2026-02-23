@@ -14,9 +14,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import CloseIcon from '@mui/icons-material/Close';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import BrushIcon from '@mui/icons-material/Brush';
-import PageTransition from '@/components/PageTransition';
-import { paintings, personalInfo } from '@/data/content';
-import { getAssetPath } from '@/utils/paths';
+import PageTransition from '../../components/PageTransition';
+import { paintings, personalInfo } from '../../data/content';
+import { getAssetPath } from '../../utils/paths';
 
 export default function PaintingsPage() {
     const [selectedPainting, setSelectedPainting] = useState<number | null>(null);
@@ -90,7 +90,7 @@ export default function PaintingsPage() {
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
-                                            src={getAssetPath(painting.image)}
+                                            src={painting.image}
                                             alt={`Painting ${index + 1}`}
                                             style={{
                                                 width: '100%',
@@ -167,7 +167,7 @@ export default function PaintingsPage() {
                                 >
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
-                                        src={getAssetPath(paintings[selectedPainting].image)}
+                                        src={paintings[selectedPainting].image}
                                         alt={`Painting ${selectedPainting + 1}`}
                                         style={{
                                             width: '100%',
