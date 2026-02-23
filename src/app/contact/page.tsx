@@ -50,12 +50,8 @@ export default function ContactPage() {
         e.preventDefault();
         setStatus('loading');
 
-        // Note to Namrata: Replace 'YOUR_FORM_ID' with your actual Formspree ID
-        // from https://formspree.io/forms
-        const FORM_ID = 'mjvnozla'; // Using a placeholder form id for setup instructions
-
         try {
-            const response = await fetch(`https://formspree.io/f/${FORM_ID}`, {
+            const response = await fetch(`https://formspree.io/namratajain29001@gmail.com`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
