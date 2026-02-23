@@ -90,7 +90,7 @@ export default function PaintingsPage() {
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
-                                            src={painting.image}
+                                            src={getAssetPath(painting.image)}
                                             alt={`Painting ${index + 1}`}
                                             style={{
                                                 width: '100%',
@@ -167,7 +167,7 @@ export default function PaintingsPage() {
                                 >
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
-                                        src={paintings[selectedPainting].image}
+                                        src={getAssetPath(paintings[selectedPainting].image)}
                                         alt={`Painting ${selectedPainting + 1}`}
                                         style={{
                                             width: '100%',
