@@ -10,8 +10,6 @@ import {
     Button,
     Grid,
     IconButton,
-    Snackbar,
-    Alert,
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import SendIcon from '@mui/icons-material/Send';
@@ -20,8 +18,8 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import EmailIcon from '@mui/icons-material/Email';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import PageTransition from '@/components/PageTransition';
-import { personalInfo } from '@/data/content';
+import PageTransition from '../../components/PageTransition';
+import { personalInfo } from '../../data/content';
 
 const socialLinks = [
     { icon: <GitHubIcon />, label: 'GitHub', href: personalInfo.social.github, color: '#F8F9FA' },
@@ -44,11 +42,20 @@ const inputSx = {
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-    const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitted(true);
+        const subject = encodeURIComponent('Get in Touch');
+        const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
+        const mailto = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+
+        const a = document.createElement('a');
+        a.href = mailto;
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
         setFormData({ name: '', email: '', message: '' });
     };
 
@@ -211,37 +218,25 @@ export default function ContactPage() {
                                     <Typography variant="h6" sx={{ mb: 1.5 }}>
                                         Prefer email?
                                     </Typography>
-                                    <Typography
-                                        variant="body1"
-                                        component="a"
+                                    <a
                                         href={`mailto:${personalInfo.email}`}
-                                        sx={{
+                                        style={{
                                             color: '#FFE66D',
                                             textDecoration: 'none',
                                             fontWeight: 600,
                                             fontSize: '1.1rem',
-                                            '&:hover': { textDecoration: 'underline' },
                                         }}
+                                        onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+                                        onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
                                     >
                                         {personalInfo.email}
-                                    </Typography>
+                                    </a>
                                 </CardContent>
                             </Card>
                         </motion.div>
                     </Grid>
                 </Grid>
             </Container>
-
-            <Snackbar
-                open={submitted}
-                autoHideDuration={4000}
-                onClose={() => setSubmitted(false)}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            >
-                <Alert severity="success" variant="filled" onClose={() => setSubmitted(false)}>
-                    Message sent! (Demo — connect a backend to make it functional)
-                </Alert>
-            </Snackbar>
         </PageTransition>
     );
 }

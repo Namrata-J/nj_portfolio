@@ -90,8 +90,8 @@ export default function PaintingsPage() {
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
-                                            src={getAssetPath(painting.image)}
-                                            alt={painting.title}
+                                            src={painting.image}
+                                            alt={`Painting ${index + 1}`}
                                             style={{
                                                 width: '100%',
                                                 height: '100%',
@@ -104,21 +104,28 @@ export default function PaintingsPage() {
                                             sx={{
                                                 position: 'absolute',
                                                 inset: 0,
-                                                background: 'linear-gradient(to top, rgba(18,15,31,0.95) 0%, transparent 70%)',
+                                                background: 'linear-gradient(to top, rgba(18,15,31,0.7) 0%, transparent 70%)',
                                                 opacity: 0,
                                                 transition: 'opacity 0.3s',
                                                 display: 'flex',
-                                                flexDirection: 'column',
+                                                alignItems: 'flex-end',
                                                 justifyContent: 'flex-end',
-                                                p: 3,
+                                                p: 2,
                                             }}
                                         >
-                                            <Typography variant="h5" sx={{ mb: 0.5, fontWeight: 700, color: '#F8F9FA' }}>
-                                                {painting.title}
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ color: '#4ECDC4' }}>
-                                                {painting.description}
-                                            </Typography>
+                                            <IconButton
+                                                component="a"
+                                                href={painting.link}
+                                                target="_blank"
+                                                onClick={(e) => e.stopPropagation()}
+                                                sx={{
+                                                    color: '#fff',
+                                                    background: 'rgba(255,107,107,0.8)',
+                                                    '&:hover': { background: '#FF6B6B' },
+                                                }}
+                                            >
+                                                <InstagramIcon fontSize="small" />
+                                            </IconButton>
                                         </Box>
                                     </Box>
                                 </motion.div>
@@ -150,33 +157,44 @@ export default function PaintingsPage() {
                             >
                                 <CloseIcon />
                             </IconButton>
-                            <DialogContent sx={{ p: 0 }}>
+                            <DialogContent sx={{ p: 0, position: 'relative' }}>
                                 <Box
                                     component={motion.div}
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
-                                    sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}
+                                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0812' }}
                                 >
-                                    <Box sx={{ flex: 1, background: '#0a0812', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={getAssetPath(paintings[selectedPainting].image)}
-                                            alt={paintings[selectedPainting].title}
-                                            style={{
-                                                width: '100%',
-                                                maxHeight: '80vh',
-                                                objectFit: 'contain',
-                                            }}
-                                        />
-                                    </Box>
-                                    <Box sx={{ width: { xs: '100%', md: 350 }, p: 4, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                        <Typography variant="h4" sx={{ mb: 2, color: '#FF6B6B' }}>{paintings[selectedPainting].title}</Typography>
-                                        <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.8 }}>
-                                            {paintings[selectedPainting].description}
-                                        </Typography>
-                                    </Box>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={paintings[selectedPainting].image}
+                                        alt={`Painting ${selectedPainting + 1}`}
+                                        style={{
+                                            width: '100%',
+                                            maxHeight: '90vh',
+                                            objectFit: 'contain',
+                                        }}
+                                    />
                                 </Box>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<InstagramIcon />}
+                                    component="a"
+                                    href={paintings[selectedPainting].link}
+                                    target="_blank"
+                                    sx={{
+                                        position: 'absolute',
+                                        bottom: 16,
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        background: 'rgba(255,107,107,0.9)',
+                                        '&:hover': { background: '#FF6B6B' },
+                                        borderRadius: '20px',
+                                        px: 3,
+                                    }}
+                                >
+                                    View on Instagram
+                                </Button>
                             </DialogContent>
                         </Dialog>
                     )}

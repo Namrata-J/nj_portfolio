@@ -41,7 +41,7 @@ export default function ProjectsPage() {
                     <Typography variant="h2" sx={{ mb: 1, fontSize: { xs: '2rem', md: '3rem' } }}>
                         My{' '}
                         <Box component="span" sx={{ color: '#4ECDC4' }}>
-                            Projects
+                            Projects ({filtered.length})
                         </Box>
                     </Typography>
                     <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 600 }}>
@@ -116,7 +116,7 @@ export default function ProjectsPage() {
                                                 <CardMedia
                                                     component="img"
                                                     height="180"
-                                                    image={`https://picsum.photos/seed/${encodeURIComponent(project.title)}/800/400`}
+                                                    image={project?.image}
                                                     alt={project.title}
                                                     sx={{
                                                         borderBottom: '1px solid rgba(255,255,255,0.05)'
@@ -127,10 +127,10 @@ export default function ProjectsPage() {
                                                     sx={{
                                                         position: 'absolute',
                                                         inset: 0,
-                                                        background: 'rgba(0,0,0,0.5)',
+                                                        background: 'rgba(0,0,0,0)',
                                                         transition: 'background 0.3s ease',
                                                         '&:hover': {
-                                                            background: 'rgba(0,0,0,0.1)',
+                                                            background: 'rgba(0,0,0,0.2)',
                                                         }
                                                     }}
                                                 />
@@ -150,9 +150,9 @@ export default function ProjectsPage() {
                                                     <Typography variant="h6" sx={{ flex: 1, fontWeight: 700 }}>
                                                         {project.title}
                                                     </Typography>
-                                                    {project.featured && (
+                                                    {project?.date && (
                                                         <Chip
-                                                            label="Featured"
+                                                            label={project.date}
                                                             size="small"
                                                             sx={{
                                                                 background: 'rgba(255,107,107,0.15)',
@@ -205,13 +205,14 @@ export default function ProjectsPage() {
                                                             Preview
                                                         </Button>
                                                     )}
-                                                    {project.code && (
+                                                    {project.code && project.code?.length > 0 && project.code.map((cd, _i) => (
                                                         <Button
+                                                            key={_i}
                                                             size="small"
                                                             variant="outlined"
                                                             startIcon={<GitHubIcon sx={{ fontSize: 16 }} />}
                                                             component="a"
-                                                            href={project.code}
+                                                            href={cd.link}
                                                             target="_blank"
                                                             sx={{
                                                                 fontSize: '0.8rem',
@@ -226,9 +227,11 @@ export default function ProjectsPage() {
                                                                 },
                                                             }}
                                                         >
-                                                            Code
+                                                            {cd.btn}
                                                         </Button>
-                                                    )}
+                                                    ))
+
+                                                    }
                                                 </Box>
                                             </CardContent>
                                         </Card>
