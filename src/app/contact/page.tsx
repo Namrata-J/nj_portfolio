@@ -44,24 +44,32 @@ const inputSx = {
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-    const [submitted, setSubmitted] = useState(false);
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const subject = encodeURIComponent(`Contact from ${formData.name}`);
-        const body = encodeURIComponent(
-            `Name: ${formData.name}\n` +
-            `Email: ${formData.email}\n\n` +
-            `Message:\n${formData.message}`
-        );
-        const mailto = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+        setStatus('loading');
 
-        // Trigger the mail client
-        window.location.href = mailto;
+        // Note to Namrata: Replace 'YOUR_FORM_ID' with your actual Formspree ID
+        // from https://formspree.io/forms
+        const FORM_ID = 'mjvnozla'; // Using a placeholder form id for setup instructions
 
-        // Show success feedback and clear form
-        setSubmitted(true);
-        setFormData({ name: '', email: '', message: '' });
+        try {
+            const response = await fetch(`https://formspree.io/f/${FORM_ID}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                setStatus('success');
+                setFormData({ name: '', email: '', message: '' });
+            } else {
+                setStatus('error');
+            }
+        } catch (error) {
+            setStatus('error');
+        }
     };
 
     return (
@@ -128,6 +136,7 @@ export default function ContactPage() {
                                             type="submit"
                                             variant="contained"
                                             size="large"
+                                            disabled={status === 'loading'}
                                             endIcon={<SendIcon />}
                                             sx={{
                                                 alignSelf: 'flex-start',
@@ -138,7 +147,7 @@ export default function ContactPage() {
                                                 }
                                             }}
                                         >
-                                            Send Message
+                                            {status === 'loading' ? 'Sending...' : 'Send Message'}
                                         </Button>
                                     </Box>
                                 </CardContent>
@@ -242,15 +251,15 @@ export default function ContactPage() {
                     </Grid>
                 </Grid>
 
-                {/* Success Feedback */}
+                {/* Feedback Notifications */}
                 <Snackbar
-                    open={submitted}
+                    open={status === 'success'}
                     autoHideDuration={6000}
-                    onClose={() => setSubmitted(false)}
+                    onClose={() => setStatus('idle')}
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 >
                     <Alert
-                        onClose={() => setSubmitted(false)}
+                        onClose={() => setStatus('idle')}
                         severity="success"
                         variant="filled"
                         sx={{
@@ -260,7 +269,23 @@ export default function ContactPage() {
                             '& .MuiAlert-icon': { color: 'white' }
                         }}
                     >
-                        Success! Your mail app should now open to send the message.
+                        Message sent successfully! I&apos;ll get back to you soon.
+                    </Alert>
+                </Snackbar>
+
+                <Snackbar
+                    open={status === 'error'}
+                    autoHideDuration={6000}
+                    onClose={() => setStatus('idle')}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                >
+                    <Alert
+                        onClose={() => setStatus('idle')}
+                        severity="error"
+                        variant="filled"
+                        sx={{ background: '#FF6B6B', color: 'white', '& .MuiAlert-icon': { color: 'white' } }}
+                    >
+                        Oops! Something went wrong. Please try again or email me directly.
                     </Alert>
                 </Snackbar>
             </Container>
