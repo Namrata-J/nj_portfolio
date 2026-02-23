@@ -10,6 +10,8 @@ import {
     Button,
     Grid,
     IconButton,
+    Snackbar,
+    Alert,
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import SendIcon from '@mui/icons-material/Send';
@@ -42,20 +44,23 @@ const inputSx = {
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const subject = encodeURIComponent('Get in Touch');
-        const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
+        const subject = encodeURIComponent(`Contact from ${formData.name}`);
+        const body = encodeURIComponent(
+            `Name: ${formData.name}\n` +
+            `Email: ${formData.email}\n\n` +
+            `Message:\n${formData.message}`
+        );
         const mailto = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
 
-        const a = document.createElement('a');
-        a.href = mailto;
-        a.rel = 'noopener noreferrer';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        // Trigger the mail client
+        window.location.href = mailto;
 
+        // Show success feedback and clear form
+        setSubmitted(true);
         setFormData({ name: '', email: '', message: '' });
     };
 
@@ -236,6 +241,28 @@ export default function ContactPage() {
                         </motion.div>
                     </Grid>
                 </Grid>
+
+                {/* Success Feedback */}
+                <Snackbar
+                    open={submitted}
+                    autoHideDuration={6000}
+                    onClose={() => setSubmitted(false)}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                >
+                    <Alert
+                        onClose={() => setSubmitted(false)}
+                        severity="success"
+                        variant="filled"
+                        sx={{
+                            width: '100%',
+                            background: 'linear-gradient(45deg, #4ECDC4 30%, #45B7D1 90%)',
+                            color: 'white',
+                            '& .MuiAlert-icon': { color: 'white' }
+                        }}
+                    >
+                        Success! Your mail app should now open to send the message.
+                    </Alert>
+                </Snackbar>
             </Container>
         </PageTransition>
     );
